@@ -25,17 +25,34 @@ function handleDecimalClick() {
 }
 
 const calculate = {
-    '+':(firNumber, secondNumber) => firNumber+secondNumber,
-    '-':(firNumber, secondNumber) => firNumber-secondNumber,
-    '*':(firNumber, secondNumber) => firNumber*secondNumber,
-    '/':(firNumber, secondNumber) => firNumber/secondNumber,
-    '=': (firNumber, secondNumber) => secondNumber,
-}
+  //6=3=  6/2=
+  "+": (firstNumber, secondNumber) => firstNumber + secondNumber,
+  "-": (firstNumber, secondNumber) => firstNumber - secondNumber,
+  "*": (firstNumber, secondNumber) => firstNumber * secondNumber,
+  "/": (firstNumber, secondNumber) => firstNumber / secondNumber,
+  "=": (firstNumber, secondNumber) => secondNumber,
+};
 
 function handleOperatorClick(operator) {
-    //3+6=
-    isFirstDigitOfNextValue = true;
-    operatorValue = operator;
+  //3+6=
+  const currentValue = Number(calculatorDisplay.textContent);
+  //3+-
+  if (operatorValue && isFirstDigitOfNextValue) {
+    operatorValue = operator; //第二个operator替代
+    return; //不做计算
+  }
+  //+6=
+  if (!firstValue) {
+    firstValue = currentValue;
+  } else {
+    // 3+6= 3+6+
+    const result = calculate[operatorValue](firstValue, currentValue); //object[]拿到的是function，所以还要pass两个arguments
+    calculatorDisplay.textContent = result;
+    //3+6+8
+    firstValue = result;
+  }
+  isFirstDigitOfNextValue = true;
+  operatorValue = operator;
 }
 
 inputBtns.forEach((inputBtn) => {
